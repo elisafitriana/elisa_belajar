@@ -25,7 +25,7 @@
         @include('layouts/topbar')
         @include('layouts/sidebar')
 
-        <div class="page-wrapper">>
+        <div class="page-wrapper">
             <div class="container-fluid">
                 @yield('content')
             </div>

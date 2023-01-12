@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,7 +22,8 @@ class TicketFactory extends Factory
             'description' => fake()->paragraph(),
             'status'=> fake()->randomElements(['open', 'close']),
             'priority'=> fake()->randomElements(['low', 'medium']),
-            'file'=>fake()->imageUrl(640, 480)
+            'file'=>fake()->imageUrl(640, 480),
+            'user_id'=>User::factory()->create(['role'=>'user'])->id
         ];
     }
 }
