@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TicketController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,8 +22,11 @@ Route::get('/dashboard', function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/', function () {
-        return view('welcome');
+        return view('dashboard');
     });
+
+    Route::resource('category',CategoryController::class)->except('show');
+    Route::resource('ticket', TicketController::class);
 });
 
 require __DIR__.'/auth.php';
