@@ -5,7 +5,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header text-right">
-                <a class="btn btn-primary" href="{{ route('category.create') }}">Tambah</a>
+                <a class="btn btn-primary" href="{{ route('user.create') }}">Tambah</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">

@@ -6,6 +6,7 @@
         <div class="card">
             <div class="card-header"><h2>Edit Kategori</h2></div>
             <form action="{{ route('category.update', $category->id) }}" method="POST">
+                @method('PUT')
                 @csrf
             <div class="card-body">
                 <div class="py-3">

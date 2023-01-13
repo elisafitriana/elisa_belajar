@@ -6,6 +6,7 @@
         <div class="card">
             <div class="card-header"><h2>Edit User</h2></div>
             <form action="{{ route('user.update', $user->id) }}" method="POST">
+                @method('PUT')
                 @csrf
             <div class="card-body">
                 <div class="py-3">

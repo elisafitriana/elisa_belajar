@@ -79,11 +79,6 @@ class TicketController extends Controller
                         ->whereYear('tickets.created_at', $param[0])
                         ->get()->groupBy('status');
 
-        $report['total'] = Ticket::selectRaw("count(id) total")
-                            ->whereMonth('tickets.created_at', $param[1])
-                            ->whereYear('tickets.created_at', $param[0])
-                            ->get();
-
         return view('ticket.report', [
             'month' =>$request->month,
             'report'=>$report

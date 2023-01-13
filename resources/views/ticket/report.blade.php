@@ -7,8 +7,8 @@
             <div class="col-md-6 col-lg-3 col-xlg-3">
                 <div class="card card-hover">
                     <div class="p-2 bg-primary text-center">
-                        <h1 class="font-light text-white">{{ @$report['total'][0]->total??0 }}</h1>
-                        <h6 class="text-white">Total Tickets</h6>
+                        <h1 class="font-light text-white">{{ @$report['open'][0]->total??0 }}</h1>
+                        <h6 class="text-white">Open</h6>
                     </div>
                 </div>
             </div>
