@@ -12,11 +12,17 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('category.index', [
-            'categories' => Category::get()
-        ]);
+        if($request->ajax){
+            $query = Category::query();
+
+            return datatables()->of($query)
+            ->addIndexColumn()
+            ->toJson();
+        }
+
+        return view('category.index');
     }
 
     /**

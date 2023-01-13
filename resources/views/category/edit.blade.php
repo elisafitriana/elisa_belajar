@@ -10,7 +10,7 @@
             <div class="card-body">
                 <div class="py-3">
                     <label for="">Nama</label>
-                    <input type="text" name="name" value="{{ old('name') ?? $category->id }}" class="form-control @error('name') is-invalid @enderror">
+                    <input type="text" name="name" value="{{ old('name') ?? $category->name }}" class="form-control @error('name') is-invalid @enderror">
                     @error('name') 
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

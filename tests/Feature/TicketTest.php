@@ -2,26 +2,44 @@
 
 namespace Tests\Feature;
 
+use App\Models\Category;
 use App\Models\Ticket;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class TicketTest extends TestCase
 {
     use DatabaseTransactions;
-    
-    public function test_user_can_get_all_ticket()
-    {
-        $tickets = Ticket::factory()->count(5)->create();
 
-        $response = $this->actingAs($this->user)->get(route('ticket.index'));
+    public function test_user_can_get_ajax_ticket()
+    {
+        $total = Ticket::where('user_id', $this->user->id)->count()+5;
+
+        Ticket::factory()->count(5)->create(['user_id'=>$this->user->id]);
+
+        $response = $this->actingAs($this->user)->get(route('ticket.index').'?ajax=true');
 
         $response->assertStatus(200)
-                ->assertViewIs('ticket.index')
-                ->assertViewHas('tickets')
-                ->assertSee($tickets->first()->title);
+                 ->assertJsonPath('recordsTotal', $total)
+                 ->assertJsonCount($total, 'data');
+    }
+
+    public function test_admin_can_get_ajax_ticket()
+    {
+        $total = Ticket::count()+5;
+
+        Ticket::factory()->count(5)->create();
+
+        $response = $this->actingAs($this->admin)->get(route('ticket.index').'?ajax=true');
+
+        $response->assertStatus(200)
+                 ->assertJsonPath('recordsTotal', $total)
+                 ->assertJsonCount($total, 'data');
     }
 
     public function test_user_can_see_add_ticket()
@@ -36,6 +54,8 @@ class TicketTest extends TestCase
     public function test_user_can_add_ticket()
     {
         $input = Ticket::factory()->make()->toArray();
+        $input['file'] = UploadedFile::fake()->image('file.jpg');
+        $input['categories'] = Category::factory()->count(1)->create()->pluck('id')->toArray();
 
         $response = $this->actingAs($this->user)
                          ->post(route('ticket.store'),$input);
@@ -63,6 +83,8 @@ class TicketTest extends TestCase
     {
         $ticket = Ticket::factory()->create();
         $ticket->title = "New name";
+        $ticket->categories = Category::factory()->count(1)->create()->pluck('id')->toArray();
+        unset($ticket->file);
 
         $response = $this->actingAs($this->user)->put(route('ticket.update', $ticket->id), $ticket->toArray());
 
@@ -87,14 +109,38 @@ class TicketTest extends TestCase
 
     public function test_user_can_comment_detail_ticket()
     {
+        $ticket = Ticket::factory()->create(['status'=>'open']);
 
+        
+        $response = $this->actingAs($this->user)->post(route('ticket.comment', $ticket->id), ['comment'=>'Appantuh!']);
+
+        $response->assertRedirectToRoute('ticket.show',$ticket->id);
+
+        $this->assertDatabaseHas('comments', [
+            'ticket_id'=> $ticket->id,
+            'comment' => 'Appantuh!',
+        ]);
     }
 
     public function test_user_can_update_status_ticket()
     {
         $ticket = Ticket::factory()->create(['status'=>'open']);
 
-        $response = $this->actingAs($this->user)->put(route('ticket.status', $ticket->id));
+        $response = $this->actingAs($this->user)->post(route('ticket.status', $ticket->id),['status'=>'waiting']);
+
+        $response->assertRedirectToRoute('ticket.show',$ticket->id);
+
+        $this->assertDatabaseHas('tickets', [
+            'id'    => $ticket->id,
+            'status'=> 'waiting',
+        ]);
+    }
+
+    public function test_user_can_update_close_ticket()
+    {
+        $ticket = Ticket::factory()->create(['status'=>'waiting']);
+
+        $response = $this->actingAs($this->user)->post(route('ticket.status', $ticket->id),['status'=>'close']);
 
         $response->assertRedirectToRoute('ticket.show',$ticket->id);
 

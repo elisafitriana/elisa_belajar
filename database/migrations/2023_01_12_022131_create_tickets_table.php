@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100);
             $table->text('description');
-            $table->enum('status',['open','close'])->default('open');
+            $table->enum('status',['open','close','waiting', 'reject'])->default('open');
             $table->enum('priority',['low','medium'])->default('low');
-            $table->string('file', 255);
+            $table->string('file', 255)->nullable();
             $table->timestamps();
             $table->foreignId('user_id')->constrained('users');
         });

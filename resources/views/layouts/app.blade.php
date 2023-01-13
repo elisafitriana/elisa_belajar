@@ -12,6 +12,8 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
     <title>@yield('title', 'Helpdesk Apps')</title>
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    @yield('style')
 </head>
 
 <body>
@@ -38,11 +40,14 @@
     <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/libs/popper.js/dist/umd/popper.min.js') }}"></script>
     <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
     <script src="{{ asset('js/app-style-switcher.js') }}"></script>
     <script src="{{ asset('js/feather.min.js') }}"></script>
     <script src="{{ asset('assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js') }}"></script>
     <script src="{{ asset('js/sidebarmenu.js') }}"></script>
     <script src="{{ asset('js/custom.min.js') }}"></script>
+    @yield('script')
 </body>
 
 </html>

@@ -20,8 +20,8 @@ class TicketFactory extends Factory
         return [
             'title' => fake()->sentence(),
             'description' => fake()->paragraph(),
-            'status'=> fake()->randomElements(['open', 'close']),
-            'priority'=> fake()->randomElements(['low', 'medium']),
+            'status'=> fake()->randomElement(['open', 'close']),
+            'priority'=> fake()->randomElement(['low', 'medium']),
             'file'=>fake()->imageUrl(640, 480),
             'user_id'=>User::factory()->create(['role'=>'user'])->id
         ];

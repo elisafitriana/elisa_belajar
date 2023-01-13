@@ -28,7 +28,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('user',UserController::class)->except('show');
     Route::resource('category',CategoryController::class)->except('show');
+    Route::get('ticket/report', [TicketController::class, 'report'])->name('ticket.report');
     Route::resource('ticket', TicketController::class);
+    Route::post('ticket/{ticket}/status', [TicketController::class, 'status'])->name('ticket.status');
+    Route::post('ticket/{ticket}/comment', [TicketController::class, 'comment'])->name('ticket.comment');
 });
 
 require __DIR__.'/auth.php';

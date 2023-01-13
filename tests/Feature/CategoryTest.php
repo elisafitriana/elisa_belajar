@@ -12,16 +12,28 @@ class CategoryTest extends TestCase
 {
     use DatabaseTransactions;
 
-    public function test_user_can_get_all_category()
-    {
-        $categories = Category::factory()->count(5)->create();
+    // public function test_user_can_get_all_category()
+    // {
+    //     $categories = Category::factory()->count(5)->create();
 
-        $response = $this->actingAs($this->admin)->get(route('category.index'));
+    //     $response = $this->actingAs($this->admin)->get(route('category.index'));
+
+    //     $response->assertStatus(200)
+    //             ->assertViewIs('category.index')
+    //             ->assertSee($categories->first()->name);
+    // }
+
+    public function test_user_can_get_ajax_category()
+    {
+        $total = Category::count()+5;
+
+        Category::factory()->count(5)->create();
+
+        $response = $this->actingAs($this->admin)->get(route('category.index').'?ajax=true');
 
         $response->assertStatus(200)
-                ->assertViewIs('category.index')
-                ->assertViewHas('categories')
-                ->assertSee($categories->first()->name);
+                 ->assertJsonPath('recordsTotal', $total)
+                 ->assertJsonCount($total, 'data');
     }
 
     public function test_user_can_see_add_category()
