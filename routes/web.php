@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('user',UserController::class)->except('show');
     Route::resource('category',CategoryController::class)->except('show');
+    Route::resource('unit',UnitController::class)->except('show');
     Route::get('ticket/report', [TicketController::class, 'report'])->name('ticket.report');
     Route::resource('ticket', TicketController::class);
     Route::post('ticket/{ticket}/status', [TicketController::class, 'status'])->name('ticket.status');

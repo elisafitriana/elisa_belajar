@@ -13,11 +13,12 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
+                                <th>Nama</th>
                                 <th>Email</th>
+                                <th>Unit</th>
                                 <th>Role</th>
-                                <th>CreatedAt</th>
-                                <th>Option</th>
+                                <th>Waktu Buat</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,6 +46,7 @@
                 { data: 'DT_RowIndex', name: 'id'},
                 { data: 'name', name: 'name'},
                 { data: 'email', name: 'email'},
+                { data: 'nama_unit', name: 'nama_unit'},
                 { data: 'role', name: 'role'},
                 { data: 'created_at', name: 'created_at'},
                 { data:  'id', width: 100, orderable: false, searchable: false, render:function(id){

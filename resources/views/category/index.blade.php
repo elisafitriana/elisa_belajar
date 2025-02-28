@@ -13,7 +13,7 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Name</th>
+                                <th>Nama</th>
                                 <th>CreatedAt</th>
                                 <th>Option</th>
                             </tr>

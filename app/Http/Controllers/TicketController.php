@@ -9,14 +9,18 @@ use App\Models\Comment;
 use App\Models\Ticket;
 use App\Models\TicketCategory;
 use App\Models\User;
+use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Mail\ExampleMail;
+use App\Mail\TicketNotification;
 
 class TicketController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -24,13 +28,25 @@ class TicketController extends Controller
      */
     public function index(Request $request)
     {
+        $auth = auth()->user();
+        // dd($auth->id);
+        $role = strtolower($auth->role);
+        
         if($request->ajax){
+            
+            if($role == 'user'){
             $query = Ticket::with('categories')
-                            ->select('tickets.*','users.name')
+                            ->select('tickets.*','users.name', 'units.nama_unit')
                             ->leftJoin('users', 'users.id','tickets.user_id')
-                            ->when(auth()->user()->role=='user', function($query){
-                                $query->where('user_id', auth()->id());
-                            });
+                            ->leftJoin('units', 'units.id','users.id_unit')
+                            ->where('tickets.user_id', $auth->id);
+            }else{
+                $query = Ticket::with('categories')
+                            ->select('tickets.*','users.name', 'units.nama_unit')
+                            ->leftJoin('users', 'users.id','tickets.user_id')
+                            ->leftJoin('units', 'units.id','users.id_unit');
+            }
+        // dd($query);
 
             return datatables()->of($query)
                                 ->addColumn('categories', function($data) {
@@ -52,7 +68,14 @@ class TicketController extends Controller
         $param = explode('-', $request->month);
 
         $query = Ticket::with('categories')
-        ->select('tickets.*','users.name')
+        ->select(
+            'tickets.*',
+            // 'tickets.title as title',
+            // 'tickets.description as description',
+            // 'tickets.status as status',
+            // 'tickets.priority as priority',
+            'users.name'
+        )
         ->leftJoin('users', 'users.id','tickets.user_id')
         ->whereMonth('tickets.created_at', $param[1])
         ->whereYear('tickets.created_at', $param[0]);
@@ -93,7 +116,8 @@ class TicketController extends Controller
     public function create()
     {
         return view('ticket.create', [
-            'categories'=>Category::select('id','name')->get()
+            'categories'=>Category::select('id','name')->get(),
+            'unit'=>Unit::select('id','nama_unit','kode_unit')->get()
         ]);
     }
 
@@ -105,17 +129,42 @@ class TicketController extends Controller
      */
     public function store(Request $request)
     {
+        $fileName='';
         $validated = $request->validate([
             'title' => 'required|max:100',
             'description'=>'nullable',
             'priority' => 'required',
             'file_upload' => 'nullable|image',
-            'categories'=> 'required|array'
+            'categories'=> 'required|array',
+            'id_unit'=> 'required'
         ]);
+        // dd($request->all());
+        
         $validated['user_id'] = auth()->id();
-
+        // dd($validated);
         if($request->hasFile('file_upload')){
-            $validated['file'] = $request->file_upload->store('public/files');
+            $image = '';
+            // dd('true');
+            // dd($request->file('file_upload'));
+            // $file = $request->file('file_upload');
+            // $filePath = $file->store('images','public/files');
+            // $fileName = basename($filePath);
+            // $filename = time() . '.' . $request->file('file_upload')->getClientOriginalExtension();
+            // dd($filename);
+
+            $file = $request->file('file_upload');
+
+            if ($file) {
+                $imgDir = public_path('images/');
+                if (!is_dir($imgDir)) {
+                    mkdir($imgDir, 0755, true);
+                }
+
+                $file_name = rand() . $file->getClientOriginalName();
+                $file->move('images/', $file_name);
+                $image = "images/" . $file_name;
+            }
+            $validated['file'] = $image;
         }else{
             $validated['file'] = null;
         }
@@ -136,6 +185,15 @@ class TicketController extends Controller
             }
 
             TicketCategory::insert($insert);
+
+            $users = User::where('id_unit', $validated['id_unit'])
+                    ->where('role', 'admin')
+                    ->get();
+
+            $validated['description'] = strip_tags($validated['description']);
+            // foreach ($users as $user) {
+            //     Mail::to($user->email)->send(new TicketNotification($user, $validated));
+            // }
         });
 
         return redirect(route('ticket.index'))->with([
@@ -164,9 +222,9 @@ class TicketController extends Controller
             'status'=>$request->status
         ]);
 
-        if($request->status=='close'){
-            Mail::to(User::find($ticket->user_id))->send(new TicketClose($ticket));
-        }
+        // if($request->status=='close'){
+        //     Mail::to(User::find($ticket->user_id))->send(new TicketClose($ticket));
+        // }
 
         return redirect(route('ticket.show',$ticket->id))->with([
             "success"=>"succesfull update status!"
@@ -222,9 +280,23 @@ class TicketController extends Controller
         $ticket = Ticket::find($id);
 
         if($request->hasFile('file_upload')){
-            $validated['file'] = $request->file_upload->store('public/files');
+            $image = '';            
+
+            $file = $request->file('file_upload');
+
+            if ($file) {
+                $imgDir = public_path('images/');
+                if (!is_dir($imgDir)) {
+                    mkdir($imgDir, 0755, true);
+                }
+
+                $file_name = rand() . $file->getClientOriginalName();
+                $file->move('images/', $file_name);
+                $image = "images/" . $file_name;
+            }
+            $validated['file'] = $image;
         }else{
-            $validated['file'] = $ticket->file;
+            // $validated['file'] = $ticket->file;
         }
         unset($validated['file_upload']);
 
@@ -264,4 +336,16 @@ class TicketController extends Controller
             "success"=>"succesfull delete ticket!"
         ]);
     }
+
+    public function sendEmail()
+{
+    $details = [
+        'title' => 'Mail from Laravel 9',
+        'body' => 'This is for testing email using Mailtrap in Laravel 9.'
+    ];
+
+    Mail::to('kamaludin9951@gmail.com')->send(new ExampleMail($details));
+
+    return 'Email sent successfully!';
+}
 }

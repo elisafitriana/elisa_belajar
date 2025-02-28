@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -15,7 +17,9 @@ class UserController extends Controller
     public function index(Request $request)
     {
         if($request->ajax){
-            $query = User::query();
+            $query = User::select('users.*', 'units.nama_unit', 'units.kode_unit')
+            ->leftJoin('units', 'users.id_unit', '=', 'units.id')
+            ->get();
 
             return datatables()->of($query)
             ->addIndexColumn()
@@ -32,7 +36,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('user.create');
+        $units = Unit::all();
+
+        return view('user.create',compact('units'));
     }
 
     /**
@@ -43,18 +49,28 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'name' => 'required|max:100',
             'email'=> 'required|email|unique:users,email',
             'password'=>'required',
+            'id_unit'=>'required',
             'role'=>'required'
         ]);
 
-        User::create($validated);
+        // Enkripsi password
+        $validated['password'] = Hash::make($request->password);
 
-        return redirect(route('user.index'))->with([
-            "success"=>"succesfull create user!"
-        ]);
+        // Simpan user baru
+        try {
+            User::create($validated);
+
+            return redirect(route('user.index'))->with([
+                "success" => "Successfully created user!"
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to create user: ' . $e->getMessage()]);
+        }
     }
 
 
@@ -80,26 +96,39 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+        // Validasi input
         $validated = $request->validate([
             'name' => 'required|max:100',
             'email'=> 'required|email|unique:users,email,'.$id,
             'password'=>'nullable',
+            'id_unit'=>'required',
             'role'=>'required'
         ]);
 
-        if($request->password){
-            $validated['password'] = bcrypt($validated['password']);
-        }else{
-            unset($validated['password']);
-        }
-
+        // Ambil data user berdasarkan $id
         $user = User::find($id);
 
-        $user->update($validated);
+        if (!$user) {
+            return redirect()->back()->withErrors(['error' => 'User not found']);
+        }
 
-        return redirect(route('user.index'))->with([
-            "success"=>"succesfull update user!"
-        ]);
+        // Update data user
+        try {
+            // Periksa apakah password baru disediakan
+            if ($request->password) {
+                $validated['password'] = Hash::make($validated['password']);
+            } else {
+                unset($validated['password']); // Hapus password dari array validated jika tidak ada password baru
+            }
+
+            $user->update($validated);
+
+            return redirect(route('user.index'))->with([
+                "success" => "Successfully updated user!"
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->withErrors(['error' => 'Failed to update user: ' . $e->getMessage()]);
+        }
     }
 
     /**

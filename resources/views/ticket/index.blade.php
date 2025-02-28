@@ -17,6 +17,7 @@
                                 <th>Status</th>
                                 <th>Priority</th>
                                 <th>Category</th>
+                                <th>Unit</th>
                                 <th>File</th>
                                 <th>Created by</th>
                                 <th>Option</th>
@@ -51,6 +52,7 @@
                 }},
                 { data: 'priority', name: 'priority'},
                 { data: 'categories', name: 'categories', orderable: false, searchable: false},
+                { data: 'nama_unit', name: 'nama_unit'},
                 { data: 'file', name: 'file'},
                 { data: 'name', name: 'name'},
                 { data:  null, width: 100, orderable: false, searchable: false, render:function(data){

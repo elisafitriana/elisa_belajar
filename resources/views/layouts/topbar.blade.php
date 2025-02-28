@@ -12,18 +12,10 @@
                 <a href="index.html">
                     <b class="logo-icon">
                         <!-- Dark Logo icon -->
-                        <img src="../assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                        <img src="../assets/images/big/rs.png" style="width: 200px;" alt="homepage" class="dark-logo mt-2" />
                         <!-- Light Logo icon -->
-                        <img src="../assets/images/logo-icon.png" alt="homepage" class="light-logo" />
+                        <img src="../assets/images/big/rs.png" style="width: 200px;" alt="homepage" class="light-logo mt-2" />
                     </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text -->
-                    <span class="logo-text">
-                        <!-- dark Logo text -->
-                        <img src="../assets/images/logo-text.png" alt="homepage" class="dark-logo" />
-                        <!-- Light Logo text -->
-                        <img src="../assets/images/logo-light-text.png" class="light-logo" alt="homepage" />
-                    </span>
                 </a>
             </div>
             <!-- ============================================================== -->
@@ -57,11 +49,11 @@
                     <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
                         <a class="dropdown-item" href="javascript:void(0)"><i data-feather="settings"
                                 class="svg-icon mr-2 ml-1"></i>
-                            Account Setting</a>
+                            Pengaturan Akun</a>
                         <div class="dropdown-divider"></div>
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
-                            <button class="dropdown-item"><i class=" fas fa-sign-out-alt"></i> Logout</button>
+                            <button class="dropdown-item"><i class=" fas fa-sign-out-alt"></i> Keluar</button>
                         </form>
                     </div>
                 </li>

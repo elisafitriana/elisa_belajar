@@ -44,7 +44,10 @@
                     @enderror
                 </div>
                 <div class="py-3">
-                    <label for="">File</label>
+                    <label for="">File</label> <br>
+                    {{-- @if (file_exists(public_path('images/' . $ticket->file)) ) --}}
+                    <img src="{{ url('/'.$ticket->file) }}" alt="img" style="width: auto; max-width: 100%; height: 100px; max-height: auto;">
+                    {{-- @endif --}}
                     <input name="file_upload" type="file" class="form-control @error('file') is-invalid @enderror">
                     @error('file') 
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -52,7 +55,7 @@
                 </div>
                 <div class="py-3">
                     <label for="">Deskripsi</label>
-                    <textarea name="description" id="desc" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description')??$ticket->description }}</textarea>
+                    <textarea name="description" id="deskripsi" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description')??$ticket->description }}</textarea>
                     @error('description') 
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>

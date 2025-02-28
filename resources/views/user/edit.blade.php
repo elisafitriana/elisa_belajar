@@ -31,6 +31,18 @@
                     @enderror
                 </div>
                 <div class="py-3">
+                    <label for="id_unit">Unit</label>
+                    <select class="form-control" id="id_unit" name="id_unit">
+                        <option value="">Pilih Unit</option>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id }}" {{ $user->id_unit== $unit->id ? 'selected' : ''}}>{{ $unit->nama_unit }}</option>
+                        @endforeach
+                    </select>
+                    @error('id_unit') 
+                    <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="py-3">
                     <label for="">Role</label>
                     <select name="role" class="form-control @error('role') is-invalid @enderror">
                         <option value="user" {{ $user->role=='user' ? 'selected' : ''}}>User</option>

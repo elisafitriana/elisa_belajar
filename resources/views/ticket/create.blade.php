@@ -8,7 +8,7 @@
 <div class="row justify-content-center">
     <div class="col-8">
         <div class="card">
-            <div class="card-header"><h2>Tambah Tiket</h2></div>
+            <div class="card-header"><h2>Tambah Work Order</h2></div>
             <form action="{{ route('ticket.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
             <div class="card-body">
@@ -24,13 +24,14 @@
                     <select name="priority" class="form-control @error('title') is-invalid @enderror">
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
+                        <option value="high">High</option>
                     </select>
                     @error('priority') 
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="py-3">
-                    <label for="">Category</label>
+                    <label for="">Kategori</label>
                     <select name="categories[]" class="form-control select2 @error('categories') is-invalid @enderror" multiple="multiple">
                         @foreach ($categories as $cat)
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
@@ -43,7 +44,21 @@
                     @enderror
                 </div>
                 <div class="py-3">
-                    <label for="">File</label>
+                    <label for="">Unit</label>
+                    <select name="id_unit" class="form-control select2 @error('unit') is-invalid @enderror">
+                        <option value="">Pilih Unit</option>
+                        @foreach ($unit as $cat)
+                            <option value="{{ $cat->id }}">{{ $cat->nama_unit }}</option>
+                        @endforeach
+                    </select>
+                    @error('unit') 
+                    <div class="invalid-feedback">
+                        <strong>{{ $message }}</strong>
+                    </div>
+                    @enderror
+                </div>
+                <div class="py-3">
+                    <label for="">Foto</label>
                     <input name="file_upload" type="file" class="form-control @error('file') is-invalid @enderror">
                     @error('file') 
                     <div class="invalid-feedback">{{ $message }}</div>
@@ -51,7 +66,7 @@
                 </div>
                 <div class="py-3">
                     <label for="">Deskripsi</label>
-                    <textarea name="description" id="desc" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description') }}</textarea>
+                    <textarea name="description" id="deskripsi" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description') }}</textarea>
                     @error('description') 
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>

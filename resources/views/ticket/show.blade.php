@@ -41,7 +41,8 @@
                 </tr>
                 <tr>
                     <td>File</td>
-                    <td>: <a target="_blank" href="{{ Storage::url($ticket->file) }}">{{ $ticket->file }}</a></td>
+                    {{-- <td>: <a target="_blank" href="{{ Storage::url($ticket->file) }}">{{ $ticket->file }}</a></td> --}}
+                    <td>: <a target="_blank" href="{{ url('/'.$ticket->file) }}">{{ $ticket->file }}</a></td>
                 </tr>
                 <tr>
                     <td>Keterangan</td>
@@ -55,7 +56,7 @@
             <div class="card-header">
                 <h2>Komentar</h2>
             </div>
-            <div class="card-body py-1">
+            <div class="py-1 card-body">
                 @if((auth()->id()==$ticket->user_id || auth()->user()->role=='admin') && $ticket->status!='close')
                 <form action="{{ route('ticket.comment', $ticket->id) }}" method="POST">
                     @csrf
@@ -72,7 +73,7 @@
         </div>
         @foreach ($ticket->comments as $comment)
         <div class="card">
-            <div class="bg-white p-2">
+            <div class="p-2 bg-white">
              <h4>{{ $comment->name }}</h4>
              <hr>
              <p>{{ $comment->comment }}</p>

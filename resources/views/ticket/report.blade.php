@@ -41,7 +41,7 @@
             <div class="card-header d-flex justify-content-between">
                 <input type="month" value="{{ $month }}" name="month" onchange="window.location.href='{{ url()->current() }}?month='+this.value">
                 <div>
-                    <a href="{{ url()->full() }}&export=true" target="_blank" class="btn btn-success"><i class="fas fa-file-excel"></i></a>
+                    <a href="{{ url()->full() }}?export=true" target="_blank" class="btn btn-success"><i class="fas fa-file-excel"></i></a>
                 </div>
             </div>
             <div class="card-body">
@@ -50,12 +50,12 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Title</th>
+                                <th>Judul</th>
                                 <th>Status</th>
-                                <th>Priority</th>
-                                <th>Category</th>
+                                <th>Level</th>
+                                <th>Kategori</th>
                                 <th>File</th>
-                                <th>Created by</th>
+                                <th>Di buat oleh</th>
                             </tr>
                         </thead>
                         <tbody>
