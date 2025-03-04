@@ -24,8 +24,34 @@
             <h4><b> Laporan Bulanan Perintah Kerja Instalasi IT</b> </h4>
         </td>
     </tr>
+
     <tr>
-        <td></td>
+        <td>&nbsp;</td>
+        @php
+        $months = [
+            "01" => 'Januari',
+            "02" => 'Februari',
+            "03" => 'Maret',
+            "04" => 'April',
+            "05" => 'Mei',
+            "06" => 'Juni',
+            "07" => 'Juli',
+            "08" => 'Agustus',
+            "09" => 'September',
+            "10" => 'Oktober',
+            "11" => 'November',
+            "12" => 'Desember'
+        ];
+
+        $selectedMonth = $month; // Example, replace with dynamic value
+        @endphp
+        <td colspan="4" style="text-align: center">
+            @if(in_array($selectedMonth, array_keys($months)))
+            <p>Bulan {{ $months[$selectedMonth] }}</p>
+        @else
+
+        @endif
+        </td>
     </tr>
     <tr>
         <th></th>
