@@ -54,7 +54,7 @@
                                 <th>Status</th>
                                 <th>Level</th>
                                 <th>Kategori</th>
-                                <th>File</th>
+                                {{-- <th>File</th> --}}
                                 <th>Di buat oleh</th>
                             </tr>
                         </thead>
@@ -87,7 +87,7 @@
                 }},
                 { data: 'priority', name: 'priority'},
                 { data: 'categories', name: 'categories', orderable: false, searchable: false},
-                { data: 'file', name: 'file'},
+                // { data: 'file', name: 'file'},
                 { data: 'name', name: 'name'}
             ],
         });

@@ -31,9 +31,9 @@ class TicketController extends Controller
         $auth = auth()->user();
         // dd($auth->id);
         $role = strtolower($auth->role);
-        
+
         if($request->ajax){
-            
+
             if($role == 'user'){
             $query = Ticket::with('categories')
                             ->select('tickets.*','users.name', 'units.nama_unit')
@@ -66,6 +66,7 @@ class TicketController extends Controller
     {
         $request['month'] = $request->month ?? date('Y-m');
         $param = explode('-', $request->month);
+        // dd($param);
 
         $query = Ticket::with('categories')
         ->select(
@@ -80,10 +81,11 @@ class TicketController extends Controller
         ->whereMonth('tickets.created_at', $param[1])
         ->whereYear('tickets.created_at', $param[0]);
 
+            // dd($query->get());
         if($request->export){
-            return Excel::download(new TicketExport($query->get()), 'ticket_report_'.$request->month.'.xlsx');
+            return Excel::download(new TicketExport($query->get(), $param[1]), 'ticket_report_'.$request->month.'.xlsx');
         }
-   
+
         if($request->ajax){
 
             return datatables()->of($query)
@@ -136,10 +138,12 @@ class TicketController extends Controller
             'priority' => 'required',
             'file_upload' => 'nullable|image',
             'categories'=> 'required|array',
-            'id_unit'=> 'required'
+            'id_unit'=> 'required',
+            'start_date' => 'nullable',
+            'end_date' => 'nullable',
         ]);
         // dd($request->all());
-        
+
         $validated['user_id'] = auth()->id();
         // dd($validated);
         if($request->hasFile('file_upload')){
@@ -274,13 +278,15 @@ class TicketController extends Controller
             'description'=>'nullable',
             'priority' => 'required',
             'file_upload' => 'nullable|image',
-            'categories'=> 'required|array'
+            'categories'=> 'required|array',
+            'start_date' => 'nullable',
+            'end_date' => 'nullable',
         ]);
 
         $ticket = Ticket::find($id);
 
         if($request->hasFile('file_upload')){
-            $image = '';            
+            $image = '';
 
             $file = $request->file('file_upload');
 

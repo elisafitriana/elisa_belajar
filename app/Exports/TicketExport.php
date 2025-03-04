@@ -13,15 +13,17 @@ class TicketExport implements FromView
 {
     public $tickets;
 
-    public function __construct($tickets)
+    public function __construct($tickets, $month)
     {
         $this->tickets = $tickets;
+        $this->month = $month;
     }
 
     public function view(): View
     {
         return view('exports.reports', [
-            'tickets' => $this->tickets
+            'tickets' => $this->tickets,
+            'month' => $this->month
         ]);
     }
 
