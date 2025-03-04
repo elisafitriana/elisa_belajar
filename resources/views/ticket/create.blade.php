@@ -73,14 +73,14 @@
                     </div>
                     @enderror
                 </div>
-                <div class="py-3">
+                {{-- <div class="py-3">
                     <label for="">Tanggal Mulai</label>
                     <input name="start_date" type="date" class="form-control">
                 </div>
                 <div class="py-3">
                     <label for="">Tanggal Selesai</label>
                     <input name="end_date" type="date" class="form-control">
-                </div>
+                </div> --}}
                 <div class="py-3 text-right">
                     <a href="{{ route('ticket.index') }}" class="btn btn-danger">Batal</a>
                     <button class="btn btn-primary">Simpan</button>

@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\ExampleMail;
 use App\Mail\TicketNotification;
+use Carbon\Carbon;
 
 class TicketController extends Controller
 {
@@ -143,6 +144,8 @@ class TicketController extends Controller
             'end_date' => 'nullable',
         ]);
         // dd($request->all());
+        $now = Carbon::now()->format('Y-m-d');
+        $validated['start_date'] = $now;
 
         $validated['user_id'] = auth()->id();
         // dd($validated);
@@ -220,11 +223,19 @@ class TicketController extends Controller
 
     public function status(Request $request, $id)
     {
+        $now = Carbon::now()->format('Y-m-d');
         $ticket = Ticket::find($id);
 
         $ticket->update([
             'status'=>$request->status
         ]);
+
+        if($request->status == 'close')
+        {
+            $ticket->update([
+                'end_date'=>$now
+            ]);
+        }
 
         // if($request->status=='close'){
         //     Mail::to(User::find($ticket->user_id))->send(new TicketClose($ticket));
