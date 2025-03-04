@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Mail\ExampleMail;
 use App\Mail\TicketNotification;
+// use Barryvdh\DomPDF\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 
 class TicketController extends Controller
@@ -84,7 +86,10 @@ class TicketController extends Controller
 
             // dd($query->get());
         if($request->export){
-            return Excel::download(new TicketExport($query->get(), $param[1]), 'ticket_report_'.$request->month.'.xlsx');
+            $pdf =  Pdf::loadview('exports.reportpdf', array('tickets' =>  $query->get(), 'month' => $param[1], 'year' => $param[0]))
+            ->setPaper('a4', 'portrait');
+            return $pdf->download('ticket_report_' .$request->month. '.pdf');
+            // return Excel::download(new TicketExport($query->get(), $param[1]), 'ticket_report_'.$request->month.'.xlsx');
         }
 
         if($request->ajax){
