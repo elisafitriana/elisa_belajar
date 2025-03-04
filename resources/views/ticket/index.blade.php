@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header text-right">
+            <div class="text-right card-header">
                 <a class="btn btn-primary" href="{{ route('ticket.create') }}">Tambah</a>
             </div>
             <div class="card-body">
@@ -18,6 +18,9 @@
                                 <th>Priority</th>
                                 <th>Category</th>
                                 <th>Unit</th>
+                                <th>Tanggal Masuk</th>
+                                <th>Tanggal Selesai</th>
+
                                 {{-- <th>File</th> --}}
                                 <th>Created by</th>
                                 <th>Option</th>
@@ -54,6 +57,8 @@
                 { data: 'categories', name: 'categories', orderable: false, searchable: false},
                 { data: 'nama_unit', name: 'nama_unit'},
                 // { data: 'file', name: 'file'},
+                {data:'start_date', name:'start_date'},
+                {data:'end_date', name:'end_date'},
                 { data: 'name', name: 'name'},
                 { data:  null, width: 100, orderable: false, searchable: false, render:function(data){
                     const url = '{{ url()->current() }}'

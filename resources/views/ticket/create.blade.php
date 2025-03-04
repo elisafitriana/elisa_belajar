@@ -15,7 +15,7 @@
                 <div class="py-3">
                     <label for="">Judul</label>
                     <input type="text" name="title" value="{{ old('title') }}" class="form-control @error('title') is-invalid @enderror">
-                    @error('title') 
+                    @error('title')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -26,7 +26,7 @@
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                     </select>
-                    @error('priority') 
+                    @error('priority')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -37,7 +37,7 @@
                             <option value="{{ $cat->id }}">{{ $cat->name }}</option>
                         @endforeach
                     </select>
-                    @error('categories') 
+                    @error('categories')
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </div>
@@ -51,7 +51,7 @@
                             <option value="{{ $cat->id }}">{{ $cat->nama_unit }}</option>
                         @endforeach
                     </select>
-                    @error('unit') 
+                    @error('unit')
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </div>
@@ -60,19 +60,27 @@
                 <div class="py-3">
                     <label for="">Foto</label>
                     <input name="file_upload" type="file" class="form-control @error('file') is-invalid @enderror">
-                    @error('file') 
+                    @error('file')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="py-3">
                     <label for="">Deskripsi</label>
                     <textarea name="description" id="deskripsi" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description') }}</textarea>
-                    @error('description') 
+                    @error('description')
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </div>
                     @enderror
                 </div>
+                {{-- <div class="py-3">
+                    <label for="">Tanggal Mulai</label>
+                    <input name="start_date" type="date" class="form-control">
+                </div>
+                <div class="py-3">
+                    <label for="">Tanggal Selesai</label>
+                    <input name="end_date" type="date" class="form-control">
+                </div> --}}
                 <div class="py-3 text-right">
                     <a href="{{ route('ticket.index') }}" class="btn btn-danger">Batal</a>
                     <button class="btn btn-primary">Simpan</button>

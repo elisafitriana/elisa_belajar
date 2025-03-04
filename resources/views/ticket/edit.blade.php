@@ -16,7 +16,7 @@
                 <div class="py-3">
                     <label for="">Judul</label>
                     <input type="text" name="title" value="{{ old('title') ?? $ticket->title }}" class="form-control @error('title') is-invalid @enderror">
-                    @error('title') 
+                    @error('title')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -26,7 +26,7 @@
                         <option value="low" {{ $ticket->priority=='low' ? 'selected' : ''}}>Low</option>
                         <option value="medium" {{ $ticket->priority=='medium' ? 'selected' : ''}}>Medium</option>
                     </select>
-                    @error('priority') 
+                    @error('priority')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
@@ -37,7 +37,7 @@
                             <option value="{{ $cat->id }}" {{ in_array($cat->id, $ticket->categories->pluck('id')->toArray()) ? 'selected' : '' }}>{{ $cat->name }}</option>
                         @endforeach
                     </select>
-                    @error('categories') 
+                    @error('categories')
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </div>
@@ -49,19 +49,27 @@
                     <img src="{{ url('/'.$ticket->file) }}" alt="img" style="width: auto; max-width: 100%; height: 100px; max-height: auto;">
                     {{-- @endif --}}
                     <input name="file_upload" type="file" class="form-control @error('file') is-invalid @enderror">
-                    @error('file') 
+                    @error('file')
                     <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="py-3">
                     <label for="">Deskripsi</label>
                     <textarea name="description" id="deskripsi" class="form-control  @error('description') is-invalid @enderror" rows="5">{{ old('description')??$ticket->description }}</textarea>
-                    @error('description') 
+                    @error('description')
                     <div class="invalid-feedback">
                         <strong>{{ $message }}</strong>
                     </div>
                     @enderror
                 </div>
+                {{-- <div class="py-3">
+                    <label for="">Tanggal Mulai</label>
+                    <input name="start_date" type="date" value="{{ old('start_date') ?? $ticket->start_date }}" class="form-control">
+                </div>
+                <div class="py-3">
+                    <label for="">Tanggal Selesai</label>
+                    <input name="end_date" type="date" value="{{ old('end_date') ?? $ticket->end_date }}"  class="form-control">
+                </div> --}}
                 <div class="py-3 text-right">
                     <a href="{{ route('ticket.index') }}" class="btn btn-danger">Batal</a>
                     <button class="btn btn-primary">Update</button>
