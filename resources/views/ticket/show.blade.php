@@ -33,7 +33,7 @@
                 </tr>
                 <tr>
                     <td>Prioritas</td>
-                    <td>: <span class="badge badge-{{ ['low'=>'warning', 'medium'=>'danger'][$ticket->priority] }}">{{ $ticket->priority }}</span></td>
+                    <td>: <span class="badge badge-{{ ['low'=>'warning', 'medium'=>'danger', 'high' => 'danger'][$ticket->priority] }}">{{ $ticket->priority }}</span></td>
                 </tr>
                 <tr>
                     <td>Kategori</td>
